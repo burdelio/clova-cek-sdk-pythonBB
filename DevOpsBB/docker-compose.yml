@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  clova-cek-sdk-pythonBB:
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+    volumes:
+      - ./data:/app/data
+
+  clova-cek-sdk-pythonBB-tests:
+    image: clova-cek-sdk-pythonBB-tests:latest
+    volumes:
+      - ./data:/app/data
+    build:
+      context: .
+      dockerfile: Dockerfile.apptest
+    depends_on:
+      - clova-cek-sdk-pythonBB
