@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh "docker build -t clova-cek-sdk-pythonBB -f DevOpsBB/docker-compose.yml"
+                sh "docker build -f DevOpsBB/docker-compose.yml"
             }
         }
         stage('Test') {
