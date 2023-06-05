@@ -1,17 +1,16 @@
 pipeline {
     agent any
     environment {
-        PYTHON_VERSION = '3.9'
+        MAJOR_VERSION = "1"
+        MINOR_VERSION = "1"
+        BUILD_VERSION = sh(returnStdout: true, script: 'echo ${BUILD_NUMBER}').trim()
+        VERSION = "${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_VERSION}"
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
     }
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
         stage('Build') {
             steps {
-                sh "docker compose -f DevOpsBB/docker-compose.yml build clova-cek-sdk-pythonBB"
+                sh "DOCKER_TLS_VERIFY=0 docker compose -f DevOpsBB/docker-compose.yml build --no-cache clova-cek-sdk-pythonBB"
             }
         }
         stage('Test') {
