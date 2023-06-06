@@ -11,11 +11,13 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                echo 'checkout:'
                 checkout scm
             }
         }
         stage('Build') {
             steps {
+                echo 'budowanie:'
                 sh "docker compose -f DevOpsBB/docker-compose.yml build clova-cek-sdk-pythonBB"
             }
         }
@@ -39,23 +41,3 @@ pipeline {
         }
     }
 }
-
-// TEST
-// pipeline {
-//     agent any
-//     environment {
-//         MAJOR_VERSION = "1"
-//         MINOR_VERSION = "1"
-//         BUILD_VERSION = sh(returnStdout: true, script: 'echo ${BUILD_NUMBER}').trim()
-//         VERSION = "${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_VERSION}"
-//         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-//     }
-//     stages {
-//         stage('Build') {
-//             steps {
-//                 echo 'budowanie:'
-//                 sh "docker compose -f DevOpsBB/docker-compose.yml build clova-cek-sdk-pythonBB"
-//             }
-//         }
-//     }
-// }
