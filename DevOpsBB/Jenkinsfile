@@ -14,16 +14,31 @@ pipeline {
                 echo 'checkout:'
                 checkout scm
             }
+            post {
+                always{
+                    echo 'done checkout'
+                }
+            }
         }
         stage('Build') {
             steps {
                 echo 'budowanie:'
                 sh "docker-compose -f DevOpsBB/docker-compose.yml build clova-cek-sdk-pythonBB"
             }
+            post {
+                always{
+                    echo 'done build'
+                }
+            }
         }
         stage('Test') {
             steps {
                 sh "docker-compose run --rm app python -m pytest tests"
+            }
+            post {
+                always{
+                    echo 'done test'
+                }
             }
         }
         stage('Deploy') {
@@ -32,6 +47,11 @@ pipeline {
             }
             steps {
                 sh "docker-compose -f DevOpsBB/docker-compose.yml up -d"
+            }
+            post {
+                always{
+                    echo 'done deploy'
+                }
             }
         }
     }
