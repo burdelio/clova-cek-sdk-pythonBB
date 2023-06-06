@@ -1,2 +1,2 @@
-FROM lab3:latest
+FROM clova-cek-sdk-python:latest
 RUN python3 -m pytest
