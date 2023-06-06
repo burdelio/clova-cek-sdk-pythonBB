@@ -10,17 +10,6 @@ pipeline {
     }
   
     stages {
-//         stage('Checkout') {
-//             steps {
-//                 echo 'checkout:'
-//                 checkout scm
-//             }
-//             post {
-//                 always{
-//                     echo 'done checkout'
-//                 }
-//             }
-//         }
         stage('Build') {
             steps {
                 echo 'budowanie:'
@@ -34,7 +23,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh "docker compose run --rm app python -m pytest tests"
+                sh "DOCKER_TLS_VERIFY= docker compose -f DevOps/docker-compose.yml build --no-cache clova-cek-sdk-python-bb-tests"
             }
             post {
                 always{
