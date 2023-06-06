@@ -38,8 +38,12 @@
 pipeline {
     agent any
     stages {
-       stage('ttt')
-        echo "TEST"
+        stage('Hello World') {
+            steps {
+                echo 'Hello, World!'
+            }
+        }
     }
 }
+
 
