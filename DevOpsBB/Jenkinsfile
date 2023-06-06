@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'budowanie:'
+                echo 'is currently builing:'
                 sh "DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml build --no-cache clova-cek-sdk-python-bb"
             }
             post {
@@ -23,6 +23,7 @@ pipeline {
         }
         stage('Test') {
             steps {
+                echo 'is currently testing:'
                 sh "DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml build --no-cache clova-cek-sdk-python-bb-tests"
             }
             post {
@@ -32,11 +33,13 @@ pipeline {
             }
         }
         stage('Deploy') {
-            when {
-                branch 'master'
-            }
             steps {
-                sh "docker compose -f DevOpsBB/docker-compose.yml up -d"
+                echo 'is currently deploying:'
+                sh "DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml build --no-cache clova-cek-sdk-python-bb-deploy"
+                sh "DOCKER_TLS_VERIFY= docker tag clova-cek-sdk-python-bb-deploy burdelio/clova-cek-sdk-pythonBB:${VERSION}"
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh "DOCKER_TLS_VERIFY= docker push burdelio/clova-cek-sdk-pythonBB:${VERSION}"
+                sh "DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml up -d clova-cek-sdk-python-bb-deploy"
             }
             post {
                 always{
