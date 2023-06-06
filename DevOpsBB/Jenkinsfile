@@ -47,6 +47,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                echo 'budowanie:'
                 sh "docker compose -f DevOpsBB/docker-compose.yml build clova-cek-sdk-pythonBB"
             }
         }
