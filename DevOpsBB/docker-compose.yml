@@ -1,26 +1,26 @@
 version: "3.9"
 services:
-  clova-cek-sdk-pythonBB:
+  clova-cek-sdk-python-bb:
     build:
       context: .
       dockerfile: Dockerfile.app
 
-  clova-cek-sdk-pythonBB-tests:
+  clova-cek-sdk-python-bb-tests:
     build:
       context: .
       dockerfile: Dockerfile.apptest
     depends_on:
-      - clova-cek-sdk-pythonBB
+      - clova-cek-sdk-python-bb
     volumes:
       - ./logs:/logs
       
-  clova-cek-sdk-pythonBB-publish:
-    image: clova-cek-sdk-pythonBB-publish:latest
+  clova-cek-sdk-python-bb-publish:
+    image: clova-cek-sdk-python-bb-publish:latest
     build:
       context: ../
       dockerfile: Dockerfile.app
       
-  clova-cek-sdk-pythonBB-deploy:
-      image: burdelio/clova-cek-sdk-pythonBB:latest
+  clova-cek-sdk-python-bb-deploy:
+      image: burdelio/clova-cek-sdk-python-bb:latest
       ports:
         - "8096:8096"
