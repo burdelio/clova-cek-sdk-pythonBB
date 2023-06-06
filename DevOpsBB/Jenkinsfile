@@ -6,7 +6,7 @@ pipeline {
         BUILD_VERSION = sh(returnStdout: true, script: 'echo ${BUILD_NUMBER}').trim()
         VERSION = "${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_VERSION}"
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-t')
-        env.DOCKER_CONFIG = '/etc/docker/daemon.json'
+        DOCKER_CONFIG = '/etc/docker/daemon.json'
         //DOCKER_HOST = "tcp://docker:2375"
     }
   
