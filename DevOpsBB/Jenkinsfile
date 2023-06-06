@@ -32,20 +32,29 @@ pipeline {
                 }
             }
         }
+        stage('Publish') {
+            steps {
+                echo 'is currently publishing:'
+                sh 'DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml build --no-cache clova-cek-sdk-python-bb-publish'
+                sh "DOCKER_TLS_VERIFY= docker tag clova-cek-sdk-python-bb-publish burdelio/clova-cek-sdk-python-bb:${VERSION}"
+                sh 'DOCKER_TLS_VERIFY= echo $DOCKERHUB_CREDENTIALS_PSW | DOCKER_TLS_VERIFY= docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh "DOCKER_TLS_VERIFY= docker push burdelio/clova-cek-sdk-python-bb:${VERSION}"
+            }
+            post {
+                always{
+                    echo 'done publish'
+                }
+            }
+        }
         stage('Deploy') {
             steps {
                 echo 'is currently deploying:'
-                sh "DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml build --no-cache clova-cek-sdk-python-bb-deploy"
-                sh "DOCKER_TLS_VERIFY= docker tag clova-cek-sdk-python-bb-deploy burdelio/clova-cek-sdk-python-bb:${VERSION}"
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                sh "DOCKER_TLS_VERIFY= docker push burdelio/clova-cek-sdk-pythonBB:${VERSION}"
-                sh "DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml up -d clova-cek-sdk-python-bb-deploy"
+                sh 'DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml up -d clova-cek-sdk-python-bb-deploy'
             }
             post {
                 always{
                     echo 'done deploy'
                 }
-            }
         }
     }
 }
