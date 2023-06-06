@@ -23,7 +23,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh "DOCKER_TLS_VERIFY= docker compose -f DevOps/docker-compose.yml build --no-cache clova-cek-sdk-python-bb-tests"
+                sh "DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml build --no-cache clova-cek-sdk-python-bb-tests"
             }
             post {
                 always{
