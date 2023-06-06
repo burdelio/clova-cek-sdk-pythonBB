@@ -17,7 +17,7 @@ services:
   clova-cek-sdk-python-bb-publish:
     image: clova-cek-sdk-python-bb-publish:latest
     build:
-      context: ../
+      context: .
       dockerfile: Dockerfile.app
       
   clova-cek-sdk-python-bb-deploy:
