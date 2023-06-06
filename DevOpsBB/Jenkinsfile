@@ -55,6 +55,7 @@ pipeline {
                 always{
                     echo 'done deploy'
                 }
+            }
         }
     }
 }
