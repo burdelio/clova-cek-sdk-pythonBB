@@ -13,14 +13,13 @@ services:
       - clova-cek-sdk-python-bb
     volumes:
       - ./logs:/logs
-      
-  clova-cek-sdk-python-bb-publish:
-    image: clova-cek-sdk-python-bb-publish:latest
-    build:
-      context: ../
-      dockerfile: Dockerfile.app
-      
+            
   clova-cek-sdk-python-bb-deploy:
       image: burdelio/clova-cek-sdk-python-bb:latest
-      ports:
-        - "8096:8096"
+      build:
+      context: .
+      dockerfile: Dockerfile.appdeploy
+    depends_on:
+      - clova-cek-sdk-python-bb
+volumes:
+  logs:
