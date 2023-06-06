@@ -35,11 +35,4 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            node {
-                sh "docker-compose down"
-            }
-        }
-    }
 }
