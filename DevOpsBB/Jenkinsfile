@@ -23,7 +23,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'budowanie:'
-                sh "DOCKER_HOST=tcp://docker:2375 docker compose -f DevOpsBB/docker-compose.yml build clova-cek-sdk-pythonBB"
+                sh "docker compose -f DevOpsBB/docker-compose.yml build clova-cek-sdk-pythonBB"
             }
             post {
                 always{
