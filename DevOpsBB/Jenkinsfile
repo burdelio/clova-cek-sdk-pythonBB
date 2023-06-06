@@ -23,7 +23,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'budowanie:'
-                sh "docker-compose -f DevOpsBB/docker-compose.yml build clova-cek-sdk-pythonBB"
+                sh "docker compose -f DevOpsBB/docker-compose.yml build clova-cek-sdk-pythonBB"
             }
             post {
                 always{
@@ -33,7 +33,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh "docker-compose run --rm app python -m pytest tests"
+                sh "docker compose run --rm app python -m pytest tests"
             }
             post {
                 always{
@@ -46,7 +46,7 @@ pipeline {
                 branch 'master'
             }
             steps {
-                sh "docker-compose -f DevOpsBB/docker-compose.yml up -d"
+                sh "docker compose -f DevOpsBB/docker-compose.yml up -d"
             }
             post {
                 always{
