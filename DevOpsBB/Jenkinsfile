@@ -7,7 +7,13 @@ pipeline {
         VERSION = "${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_VERSION}"
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
     }
+  
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Build') {
             steps {
                 sh "docker compose -f DevOpsBB/docker-compose.yml build clova-cek-sdk-pythonBB"
