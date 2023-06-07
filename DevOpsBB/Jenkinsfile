@@ -6,36 +6,37 @@ pipeline {
         BUILD_VERSION = sh(returnStdout: true, script: 'echo ${BUILD_NUMBER}').trim()
         VERSION = "${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_VERSION}"
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-jenkins-token')
-        //DOCKER_HOST = "tcp://docker:2375"
     }
   
     stages {
         stage('Build') {
             steps {
                 echo 'is currently builing:'
-                sh "DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml build --no-cache clova-cek-sdk-python-bb"
+                sh "DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml build --no-cache clova-cek-sdk-python-bb > DevOpsBB/logs-build.txt"
             }
             post {
                 always{
                     echo 'done build'
+                    archiveArtifacts(artifacts: 'DevOpsBB/*.txt', fingerprint: true, followSymlinks: false)
                 }
             }
         }
         stage('Test') {
             steps {
                 echo 'is currently testing:'
-                sh "DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml build --no-cache clova-cek-sdk-python-bb-tests"
+                sh "DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml build --no-cache clova-cek-sdk-python-bb-tests > DevOpsBB/logs-test.txt"
             }
             post {
                 always{
                     echo 'done test'
+                    archiveArtifacts(artifacts: 'DevOpsBB/*.txt', fingerprint: true, followSymlinks: false)
                 }
             }
         }
         stage('Publish') {
             steps {
                 echo 'is currently publishing:'
-                sh 'DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml build --no-cache clova-cek-sdk-python-bb-publish'
+                sh 'DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml build --no-cache clova-cek-sdk-python-bb-publish  > DevOpsBB/logs-publish.txt'
                 sh "DOCKER_TLS_VERIFY= docker tag clova-cek-sdk-python-bb-publish bedizrobskrrr/clova-cek-sdk-python-bb:${VERSION}"
                 sh 'DOCKER_TLS_VERIFY= echo $DOCKERHUB_CREDENTIALS_PSW | DOCKER_TLS_VERIFY= docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                 sh "DOCKER_TLS_VERIFY= docker push bedizrobskrrr/clova-cek-sdk-python-bb:${VERSION}"
@@ -43,17 +44,19 @@ pipeline {
             post {
                 always{
                     echo 'done publish'
+                    archiveArtifacts(artifacts: 'DevOpsBB/*.txt', fingerprint: true, followSymlinks: false)
                 }
             }
         }
         stage('Deploy') {
             steps {
                 echo 'is currently deploying:'
-                sh 'DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml up -d clova-cek-sdk-python-bb-deploy'
+                sh 'DOCKER_TLS_VERIFY= docker compose -f DevOpsBB/docker-compose.yml up -d clova-cek-sdk-python-bb-deploy > DevOpsBB/logs-deploy.txt'
             }
             post {
                 always{
                     echo 'done deploy'
+                    archiveArtifacts(artifacts: 'DevOpsBB/*.txt', fingerprint: true, followSymlinks: false)
                 }
             }
         }
