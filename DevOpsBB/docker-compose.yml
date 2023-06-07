@@ -21,6 +21,6 @@ services:
       dockerfile: Dockerfile.app
       
   clova-cek-sdk-python-bb-deploy:
-      image: bedizrobskrrr/clova-cek-sdk-python-bb:latest
+      image: bedizrobskrrr/clova-cek-sdk-python-bb:${VERSION}
       ports:
         - "8096:8096"
